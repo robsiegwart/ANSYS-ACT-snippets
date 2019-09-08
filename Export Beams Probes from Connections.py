@@ -54,7 +54,7 @@ if beams_to_create:
         bp.BoundaryConditionSelection = beam
         sol_beam_probes.append(bp)
 
-solution.EvaluateAllResults()
+    solution.EvaluateAllResults()
 
 # Open an output file to write results to
 f = open('Beam results.txt','w')
