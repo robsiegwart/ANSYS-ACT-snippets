@@ -136,6 +136,7 @@ def save_forces_moments(items_list,folder_name=None):
                      str(moment.YAxis).split('[')[0] + '\t' +
                      str(moment.ZAxis).split('[')[0] + '\n' )
         except IndexError:
+            f.write('\n')
             print 'Cannot find corresponding Moment Probe'
 
 
