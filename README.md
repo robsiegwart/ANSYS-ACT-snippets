@@ -1,4 +1,4 @@
-# ANSYS_ACT_snippets
+# ANSYS-ACT-snippets
 
 Collection of some files for performing scripting in ANSYS Mechanical via the ACT API.
 
