@@ -52,7 +52,7 @@ if beams_to_create:
     for beam in beams_to_create:
         bp = solution.AddBeamProbe()
         bp.BoundaryConditionSelection = beam
-        sol_beams.append(bp)
+        sol_beam_probes.append(bp)
 
 solution.EvaluateAllResults()
 
@@ -63,7 +63,7 @@ f.write('Name\tAxial Force\tTorque\tShear Force at I\tShear Force at J\tMoment a
 
 # Write out beam probes to a file
 #   the unit segment (e.g. [lbf]) is stripped from the result
-for br in sol_beams:
+for br in sol_beam_probes:
     name = str(br.BoundaryConditionSelection.Name).strip()
     f.write( name + '\t' +
              str(br.AxialForce).split('[')[0] + '\t' +
