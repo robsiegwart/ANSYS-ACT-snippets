@@ -29,8 +29,8 @@ Description:  This is a Mechanical ACT script to save out Force and Moment
 Requirements: Put a Force and Moment probe for each desired contact item in the
               Solution, in a folder with the word 'weld' in it. This can be sped
               up by right-clicking on the Contact item in the Connections
-              folder and choosing "Create > Force Probe" and "Create > Moment
-              Probe".
+              folder and choosing "Create > Force Reaction" and "Create > Moment
+              Reaction".
 
               One additional folder group is allowed within a top-level folder.
               For example:
