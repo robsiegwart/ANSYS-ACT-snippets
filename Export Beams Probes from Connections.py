@@ -38,7 +38,7 @@ connections = ExtAPI.DataModel.Project.Model.Connections
 solution = ExtAPI.DataModel.Project.Model.Analyses[0].Solution
 
 # Filter the connections and solution items for beams and beam probes, respectively
-cont_beams = filter(lambda item: item.GetType() == Ansys.ACT.Automation.Mechanical.Connections.Beam, connections.Children)
+cont_beams = filter(lambda item: item.GetType() == Ansys.ACT.Automation.Mechanical.Connections.Beam and item.Suppressed == False, connections.Children)
 sol_beam_probes = filter(lambda item: item.GetType() == Ansys.ACT.Automation.Mechanical.Results.ProbeResults.BeamProbe, solution.Children)
 
 # Create a list of beams from the solution beam probes
