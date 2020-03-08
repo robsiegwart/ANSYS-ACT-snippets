@@ -1,74 +1,94 @@
+# MIT License
+
+# Copyright (c) 2020 Rob Siegwart
+
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
 '''
-Title:        Weld Exporting Script for ANSYS Mechanical
+Weld Exporting Script for ANSYS Mechanical
+==========================================
 
-Author:       Rob Siegwart
+This is a Mechanical ACT script to save out Force and Moment probes defined in
+the Solution portion of the tree, associated with Bonded contact representing
+welds.
 
-Updated:      9/5/2019
+To mark Force/Moment probes as welds, they must be in a group with the word
+'weld' in it (case insensitive). Then, all force and moment probes contained
+in it are exported.
 
-Description:  This is a Mechanical ACT script to save out Force and Moment
-              probes defined in the Solution portion of the tree, associated
-              with Bonded contact representing welds.
-              
-              To mark Force/Moment probes as welds, they must be in a group with
-              the word 'weld' in it (case insensitive). Then, all force and
-              moment probes contained in it are exported.
+The file is saved to the 'user_files' directory associated with the project
+and is called 'Weld Results.txt'.
 
-              The file is saved to the 'user_files' directory associated with
-              the project and is called 'Weld Results.txt'.
-              
-              Force probes are used as the master list and so the program
-              loops through the forces and finds the corresponding moment
-              probe for the same contact item. Stray moment probes will not be
-              discovered. If no moment probe exists, a new line is added and the
-              data for the moment fields are blank.
-              
-              The output text file is tab-delimited with the following
-              contents/columns:
-                  Probe Name    FX    FY    FZ    MX    MY    MZ
+Force probes are used as the master list and so the program loops through the
+forces and finds the corresponding moment probe for the same contact item.
+Stray moment probes will not be discovered. If no moment probe exists, a new
+line is added and the data for the moment fields are blank.
 
-Requirements: Put a Force and Moment probe for each desired contact item in the
-              Solution, in a folder with the word 'weld' in it. This can be sped
-              up by right-clicking on the Contact item in the Connections
-              folder and choosing "Create > Force Reaction" and "Create > Moment
-              Reaction".
+The output text file is tab-delimited with the following contents/columns:
+    
+    Probe Name    FX    FY    FZ    MX    MY    MZ
 
-              One additional folder group is allowed within a top-level folder.
-              For example:
-   
-                  [-] Solution (A6)
-                      |-- Solution Information
-                      |-- [-] Welds 1
-                           |-- [-] Box 1
-                           |    |-- Force Reaction 1
-                           |    |-- Moment Reaction 1
-                           |-- [-] Box 2 
-                           |    |-- Force Reaction 3
-                           |    |-- Moment Reaction 3
-                           |-- Force Reaction 4
-                           |-- Moment Reaction 4
 
-Other notes:  For moment summation the default is to use the centroid of the
-              contact element set. If your contact geometry accurately
-              represents the weld geometry then this will be ok. Otherwise you
-              will likely need some small value of trim set in the contact
-              definition, so that the moment summation point is approximately
-              at the actual centroid of the weld group. Alternatively, a custom
-              coordinate system could be used but this is not supported in this
-              script yet.
+To Use
+------
+Put a Force and Moment probe for each desired contact item in the Solution, in
+a folder with the word 'weld' in it. This can be sped up by right-clicking on
+the Contact item in the Connections folder and choosing
+"Create > Force Reaction" and "Create > Moment Reaction".
 
-              Remember that ANSYS uses Python 2.x.
+One additional folder group is allowed within a top-level folder. For example:
 
-Limitations:  Does not support custom coordinate systems for the moment
-              summation. Could be a future feature.
+    [-] Solution (A6)
+        |-- Solution Information
+        |-- [-] Welds 1
+            |-- [-] Box 1
+            |    |-- Force Reaction 1
+            |    |-- Moment Reaction 1
+            |-- [-] Box 2 
+            |    |-- Force Reaction 3
+            |    |-- Moment Reaction 3
+            |-- Force Reaction 4
+            |-- Moment Reaction 4
 
-ANSYS         17.1, 2019R1
-versions
-tested with:
 
-Future goal:  A nice option for this script would be to grab the contacts
-              marked as welds in the **connections** folder and then find the
-              corresponding force and moment probes in the solution object if
-              they exist or create new ones if they don't already exist.
+Notes
+-----
+For moment summation the default is to use the centroid of the contact element
+set. If your contact geometry accurately represents the weld geometry then this
+will be ok. Otherwise you will likely need some small value of trim set in the
+contact definition, so that the moment summation point is approximately at the
+actual centroid of the weld group. Alternatively, a custom coordinate system
+could be used but this is not supported in this script yet.
+
+Remember that ANSYS uses Python 2.x.
+
+Limitations:
+  Does not support custom coordinate systems for the moment summation. Could be
+  a future feature.
+
+ANSYS versions tested with:
+  17.1, 2019R1
+
+A nice future feature for this script would be to grab the contacts
+marked as welds in the **connections** folder and then find the
+corresponding force and moment probes in the solution object if
+they exist or create new ones if they don't already exist.
 
 '''
 

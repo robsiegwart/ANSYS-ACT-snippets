@@ -1,29 +1,45 @@
+# MIT License
+
+# Copyright (c) 2020 Rob Siegwart
+
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
 '''
-Title:        Beam Probe Exporting Script for ANSYS Mechanical
+Beam Probe Exporting Script for ANSYS Mechanical
+================================================
 
-Author:       Rob Siegwart
+This is a Mechanical ACT script to save out beam result probes to a text file.
 
-Updated:      9/5/2019
+This file loops through the beams in the Connections folder and searches for
+the corresponding beam probes in the Solution. If a beam probe is not already
+in the Solution for that beam then a new one is created. Therefore you do not
+need to already have created the result probes in the Solution.
 
-Description:  This is a Mechanical ACT script to save out beam result probes to
-              a text file.
+The output text file is tab-delimited with the following contents/columns:
 
-              This version loops through the beams in the Connections folder and
-              searches for the corresponding beam probes in the Solution. If a
-              beam probe is not already in the Solution for that beam then a new
-              one is created. Therefore you do not need to already have created
-              the result probes in the Solution.
+    Beam Name    Axial Force    Torque    Shear Force at I    Shear Force at J    Moment at I    Moment at J
 
-              The output text file is tab-delimited with the following
-              contents/columns:
-              
-                  Beam Name    Axial Force    Torque    Shear Force at I    Shear Force at J    Moment at I    Moment at J
-              
-              Remember that ANSYS uses Python 2.x.
 
-ANSYS         17.1, 2019R1
-versions
-tested with: 
+Remember that ANSYS uses Python 2.x.
+
+ANSYS versions tested with:
+  17.1, 2019R1
 
 '''
 
