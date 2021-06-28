@@ -41,6 +41,8 @@ Remember that ANSYS uses Python 2.x.
 ANSYS versions tested with:
   17.1, 2019R1
 
+
+VERSION 0.1.0
 '''
 
 # Set the working directory to the user_files directory of the project
