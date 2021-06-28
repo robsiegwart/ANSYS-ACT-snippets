@@ -35,7 +35,7 @@ The output text file is tab-delimited with the following contents/columns:
 ## Usage
 
 Open the ACT pane with the button (pre-tabbed application shown):
-![ANSYS ACT button](images/BTN.png)
+![ANSYS ACT button](images/btn.PNG)
 
 Copy and paste script contents into the console of the ANSYS ACT pane:
-![ANSYS ACT console](images/console.png)
+![ANSYS ACT console](images/console.PNG)
