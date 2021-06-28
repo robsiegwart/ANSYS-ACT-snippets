@@ -47,12 +47,12 @@ The output text file is tab-delimited with the following contents/columns:
 
 To Use
 ------
-Put a Force and Moment probe for each desired contact item in the Solution, in
-a folder with the word 'weld' in it. This can be sped up by right-clicking on
-the Contact item in the Connections folder and choosing
+Put a Force and Moment probe for each desired contact item in the Solution,
+within a folder with the word 'weld' in it. This can be sped up by
+right-clicking on the Contact item in the Connections folder and choosing
 "Create > Force Reaction" and "Create > Moment Reaction".
 
-One additional folder group is allowed within a top-level folder. For example:
+For example:
 
     [-] Solution (A6)
         |-- Solution Information
@@ -83,15 +83,16 @@ Limitations:
   a future feature.
 
 ANSYS versions tested with:
-  17.1, 2019R1
+  17.1
 
 A nice future feature for this script would be to grab the contacts
 marked as welds in the **connections** folder and then find the
 corresponding force and moment probes in the solution object if
 they exist or create new ones if they don't already exist.
 
-'''
 
+VERSION 0.2.0
+'''
 
 # Set the working directory to the user_files directory of the project
 from os import chdir
@@ -103,15 +104,16 @@ chdir(user_dir)
 connections = ExtAPI.DataModel.Project.Model.Connections
 solution = ExtAPI.DataModel.Project.Model.Analyses[0].Solution
 
-# Write out force/moment probes to a file
-#   The unit portion (e.g. [lbf] and [lbf-in]) is stripped from the result so that it may be imported into Excel and used as is
+# The unit portion (e.g. [lbf] and [lbf-in]) is stripped from the result so that it may be imported into Excel and used as is
 solution_weld_groups = filter(lambda item: item.GetType() == Ansys.ACT.Automation.Mechanical.TreeGroupingFolder, solution.Children)
 solution_weld_groups = filter(lambda item: 'weld' in item.Name.lower(), solution_weld_groups)
 
 
 def cleanup_name(string):
-    ''' Clean up the default ANSYS names after you right-click and select
-        "Rename Based on Definition".
+    '''
+    Clean up the default ANSYS names after you right-click and select
+    "Rename Based on Definition". Removes common elements that show up in the
+    name.
     '''
     to_remove = ['All - ', ' (Underlying Element)', 'End Time', ' - ', 'Force Reaction', 'Contact', '1. s' ]
     name = string
@@ -120,13 +122,19 @@ def cleanup_name(string):
     return name.strip()
    
    
-def save_forces_moments(items_list,folder_name=None):
-    ''' Loop through a list of ANSYS items and save force and moment probes.
-        The forces are used as the master - moments are looked up based on the
-        force. Stray moment probes won't be discovered.
+def save_forces_moments(items_list, folder_name=None):
+    '''
+    Loop through a list of ANSYS items and save force and moment probes. The
+    forces are used as the master - moments are looked up based on the force.
+    Stray moment probes won't be discovered.
         
-        Set a string to folder_name to have it print the folder name in the
-        output file.
+    Set a string to folder_name to have it print the folder name in the output
+    file.
+
+    Parameters
+    ----------
+    items_list      a list of ANSYS objects to filter for force, moments
+    folder_name     an optional name to include in the output text name description
     '''
     forces = filter(lambda x: x.GetType() == Ansys.ACT.Automation.Mechanical.Results.ProbeResults.ForceReaction, items_list)
     moments = filter(lambda x: x.GetType() == Ansys.ACT.Automation.Mechanical.Results.ProbeResults.MomentReaction, items_list)
@@ -160,23 +168,23 @@ def save_forces_moments(items_list,folder_name=None):
             print 'Cannot find corresponding Moment Probe'
 
 
-# Open an output file to write results to
+def loop(items, name=None):
+    '''
+    Loop function to recursively save out force/moments from nested folders.
+
+    Parameters
+    ----------
+    items       a list of ANSYS solution objects
+    '''
+    save_forces_moments(items, name)
+    sub_folders = filter(lambda x: x.GetType() == Ansys.ACT.Automation.Mechanical.TreeGroupingFolder, items)
+    for group in sub_folders:
+        loop(group.Children, group.Name)
+        
+
+# Write out force/moment probes to a file
 f = open('Weld results.txt','w')
 f.write('Welds\n\n')
 f.write('Name\tFX\tFY\tFZ\tMX\tMY\tMZ\n\n')
-
-
-# actual looping over items
-for group in solution_weld_groups:
-    items = group.Children
-    
-    # save any forces/moments that exist at the first level
-    save_forces_moments(items)
-        
-    # go through any folders nested one level deep
-    sub_folders = filter(lambda x: x.GetType() == Ansys.ACT.Automation.Mechanical.TreeGroupingFolder, items)
-    if sub_folders:
-        for sub_folder in sub_folders:
-            save_forces_moments(sub_folder.Children,sub_folder.Name)
-
+loop(solution_weld_groups)
 f.close()
